@@ -1,0 +1,38 @@
+Purpose of the game (from a creator's standpoint) is to create a platform
+for AI to learn by competing against itself, much like the famous 1960s
+checkers case from IBM. After playing against copies of itself, the AI
+will (with luck) become competent enough to play against a human.
+
+The game will be a simultaneous turn based game. This way there is uncertainty
+not only about what opponents will do in the future, but about what opponents
+will do "right now." Similar to real time games. I've chosen turn based
+because that will be computationally much easier. Real time AI is full
+of difficulties that I don't want to try to tackle for now. The game will
+also be tile-based to allow for easier graph-theoretic processing.
+
+I'm imagining a simplified version of the game "frozen synapse." Two 
+players exist on the same tileset. The tileset consists of barriers and
+free spaces. Characters have a few limited options to choose from each turn.
+For example, characters have two "action points" each turn that they can use.
+They can use action points to either move, attack, or defend. Since they have
+two move points, they choose any two combination action. E.g. they could
+move twice; attack then defend, move then defend; etc. Attacking might consist
+of shooting a gun. Defending might consist of holding up a shield. Moving 
+consists of traveling to an adjacent tile. The object of the game would be
+to kill the opponent. Possibly there would be a second objective of
+arriving at a specific tile (e.g. like capturing the enemy flag).
+
+The exact mechanics will have to be worked out. For example, if one player
+attacks while the other moves, does the attacking player have to attack the
+adjacent square where his opponent moves into? If a player defends, does this
+entirely negate the attack or just lessen its effects?
+
+The AI will be trained probably using a genetic algorithm (maybe a genetic
+tree like the DOD guy at 8451?) that searches a decision parameter space.
+For example, variables might be things like: do you have a direct shot
+at your opponent? Are you within N moves of having a direct shot? What is
+your health? What is your opponent's health? Do you tend to greedily charge
+at your opponent until you are within range? Do you tend to wait? Do you
+charge towards the middle of the battlefield and set up a defensive position?
+Where is the nearest barrier that provides cover from fire? Does it have an 
+escape route?
