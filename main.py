@@ -16,12 +16,4 @@ if __name__ == '__main__':
     user1 = User(world, 1)
     user2 = User(world, 2)
 
-    while True:
-        world.print_tiles()
-        print "USER 1 COMMANDS"
-        user1.get_commands()
-        print "USER 2 COMMANDS"
-        user2.get_commands()
-        world.print_tiles()
-        world.execute_logic()
-        world.check_victory()
+    world.run()
