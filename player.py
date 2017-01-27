@@ -6,6 +6,7 @@ Actions include the following:
     4) shoot (this takes on x/y coordinates of the player's target)
 '''
 
+
 class Player():
     def __init__(self, world, id):
         '''

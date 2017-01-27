@@ -1,7 +1,7 @@
 '''
 
 '''
-NUM_ACTIONS = 3
+from config import NUM_ACTIONS, VALID_ACTIONS
 from player import Player
 
 class Command():
@@ -19,7 +19,7 @@ class Command():
             msg = 'Number must be between 1 and %s got %s'
             raise ValueError(msg %(NUM_ACTIONS, self.number))
 
-        if self.action not in ['rest', 'shield', 'move', 'shoot']:
+        if self.action not in VALID_ACTIONS:
             msg = 'Action must be rest, shield, move, shoot. Got %s'
             raise ValueError(msg %self.action)
 

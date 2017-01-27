@@ -3,6 +3,7 @@ The interface for sending and receiving information to the game.
 How users (human or AI) interact with the game itself.
 '''
 from command import Command
+from config import VALID_ACTIONS
 
 
 class User():
@@ -10,11 +11,10 @@ class User():
         self.world = world
         self.id = id
         self.world.add_user(self)
-        self.valid_actions = ['rest', 'shield', 'move', 'shoot', 'clear']
 
     def command(self, action, number):
-        if action not in self.valid_actions:
-            print 'Action must be either %s.' %' '.join(self.valid_actions)
+        if action not in VALID_ACTIONS:
+            print 'Action must be either %s.' %' '.join(VALID_ACTIONS)
             print 'Got %s' %action
             return None
         if action == 'clear':
