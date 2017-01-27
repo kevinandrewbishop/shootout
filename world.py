@@ -89,6 +89,25 @@ class World():
         #self.render(self.commands)
         self.commands = list()
 
+    def check_victory(self):
+        dead_players = list()
+        for i in self.players:
+            player = self.players[i]
+            if player.health <= 0:
+                dead_players.append(player.id)
+        if len(dead_players) == 2:
+            self.end_game(3)
+        elif len(dead_players) == 1:
+            self.end_game(dead_players[0])
+
+    def end_game(self, id):
+        if id == 3:
+            print "Both players have died. Game is a tie!"
+        if id == 1:
+            print "Player 1 has died. Player 2 wins!"
+        if id == 2:
+            print "Player 2 has died. Player 1 wins!"
+
     def report_outcome(self):
         pass
 

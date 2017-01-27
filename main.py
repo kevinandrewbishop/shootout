@@ -24,3 +24,4 @@ if __name__ == '__main__':
         user2.get_commands()
         world.print_tiles()
         world.execute_logic()
+        world.check_victory()
