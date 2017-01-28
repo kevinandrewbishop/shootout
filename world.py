@@ -53,6 +53,7 @@ class World():
         self.y_len = board_dim[1]
         self.tiles = [['' for i in range(self.y_len)] for j in range(self.x_len)]
         self.game_over = False
+        self.outcome = 0
 
     def add_user(self, user):
         id_ = user.id
@@ -103,6 +104,7 @@ class World():
 
     def end_game(self, id):
         self.game_over = True
+        self.outcome = id
         if id == 3:
             print "Both players have died. Game is a tie!"
         elif id == 1:
@@ -111,6 +113,7 @@ class World():
             print "Player 2 has died. Player 1 wins!"
         else:
             self.game_over = False
+            self.outcome = 0
 
     def run(self):
         while True:
@@ -127,7 +130,18 @@ class World():
 
 
     def report_outcome(self):
-        pass
+        p1 = self.players[1]
+        p2 = self.players[2]
+        output = {
+            'p1_x': p1.x,
+            'p1_y': p1.y,
+            'p2_x': p2.x,
+            'p2_y': p2.y,
+            'p1_health': p1.health,
+            'p2_health': p2.health,
+            'outcome': self.outcome
+            }
+        return output
 
 
 
