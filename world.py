@@ -129,7 +129,7 @@ class World():
                 break
 
 
-    def report_outcome(self):
+    def get_state(self):
         p1 = self.players[1]
         p2 = self.players[2]
         output = {

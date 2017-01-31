@@ -3,7 +3,7 @@ from player import Player
 from world import World
 from user import User
 from command import Command
-
+from ai import AI
 
 
 if __name__ == '__main__':
@@ -14,6 +14,6 @@ if __name__ == '__main__':
         x, y = b
         world.tiles[x][y] = 'X'
     user1 = User(world, 1)
-    user2 = User(world, 2)
+    user2 = AI(world, 2)
 
     world.run()

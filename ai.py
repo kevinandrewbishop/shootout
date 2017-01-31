@@ -16,6 +16,7 @@ be to assume opponent makes random choices mixed with simplistic heuristics.
 '''
 from config import NUM_ACTIONS, VALID_ACTIONS
 from user import User
+from command import Command
 
 class AI(User):
     def check_legal_command(self, command, params = None):
@@ -44,6 +45,19 @@ class AI(User):
         else:
             return True
 
+    def get_commands(self):
+        state = self.world.get_state()
+        state_ = self.extract_features(state)
+
+        ####temporary naive AI rules just for testing purposes###
+        if state_['los']:
+            commands = [Command(i, 'shoot', self.player, (state_['x_'], state_['y_'])) for i in range(3)]
+        else:
+            commands = [Command(i, 'move', self.player, state_['gradient']) for i in range(3)]
+        self.world.receive_commands(commands)
+
+
+
 
     def evaluate_state(self, state):
         #scores the game state. Higher scores are more advantageous
@@ -53,7 +67,38 @@ class AI(User):
         #Takes raw game state and computes high level features
         #Examples might include whether there is a clear line of sight to opponent
         #Distance to opponent, distance to nearest barrier
-        pass
+
+        x = state['p%s_x' %self.id]
+        y = state['p%s_y' %self.id]
+        x_ = state['p%s_x' %(3 - self.id)]
+        y_ = state['p%s_y' %(3 - self.id)]
+        touched_cells = self.player.trace_ray((x,y), (x_, y_))
+        los = touched_cells[-1] == (x_, y_)
+        dist = abs(x - x_) + abs(y - y_)
+        if abs(x - x_) > abs(y - y_):
+            if x > x_:
+                gradient = 'u'
+            else:
+                gradient = 'd'
+        elif y > y_:
+            gradient = 'l'
+        else:
+            gradient = 'r'
+
+        health = state['p%s_health' %self.id]
+        health_ = state['p%s_health' %(3 - self.id)]
+        health_diff = health - health_
+        out = {
+            'los': los,
+            'dist': dist,
+            'gradient': gradient,
+            'heath_diff': health_diff,
+            'x': x,
+            'y': y,
+            'x_': x_,
+            'y_': y_
+        }
+        return out
 
     def build_tree(self):
         pass
