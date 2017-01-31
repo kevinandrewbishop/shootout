@@ -71,8 +71,18 @@ class World():
             self.tiles[self.x_len - 1][self.y_len - 1] = str(id_)
 
     def print_tiles(self):
+        print '   |' + ' | '.join(['%02d'%i for i in range(self.y_len)]) +'|'
+        i = 0
         for tile in self.tiles:
-            print tile
+            temp = list()
+            for t in tile:
+                if not t:
+                    temp.append('_')
+                else:
+                    temp.append(t)
+            print i, temp, i
+            i += 1
+        print '   |' + ' | '.join(['%02d'%i for i in range(self.y_len)]) +'|'
 
     def receive_commands(self, commands):
         self._validate_commands(commands)
@@ -125,6 +135,7 @@ class World():
             self.print_tiles()
             self.execute_logic()
             self.check_victory()
+            print self.get_state()
             if self.game_over:
                 break
 

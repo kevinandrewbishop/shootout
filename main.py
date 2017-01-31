@@ -13,7 +13,8 @@ if __name__ == '__main__':
     for b in barriers:
         x, y = b
         world.tiles[x][y] = 'X'
-    user1 = User(world, 1)
+    user1 = AI(world, 1)
     user2 = AI(world, 2)
+    #user2 = User(world, 2)
 
-    world.run()
+    #world.run()
