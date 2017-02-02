@@ -68,17 +68,22 @@ class AI(User):
 
     def evaluate_state(self, state):
         #scores the game state. Higher scores are more advantageous
-        score = state['health_diff']
+        score = state['health_diff']*self.params['health_diff']
         if state['health_diff'] >= 0:
             if state['los']:
-                score += 1
+                score += self.params['los_bonus']
         else:
             if state['los']:
-                score -= 1
+                score -= self.params['los_bonus']
         if state['health_diff'] == 0:
-            score -= state['dist']/20.
-        if state['health_diff'] > 0:#make it aggressively pursue a positive healthdiff
-            score += 1
+            score -= state['dist']/float(self.params['dist_div'])
+        #make it aggressively pursue a positive healthdiff
+        if state['health_diff'] > 0:
+            score += self.params['health_diff_aggress']
+        if state['health_'] <= 0:
+            score += self.params['win']
+        if state['health'] <= 0:
+            score += self.params['lose']
         return score
 
     def extract_features(self, state):
@@ -132,7 +137,7 @@ class AI(User):
         targets1 = {s: (state['x_'] + s.count('d') - s.count('u'), state['y_'] + s.count('r') - s.count('l')) for s in shootings}
         targets2 = {s: (state['x'] + s.count('d') - s.count('u'), state['y'] + s.count('r') - s.count('l')) for s in shootings}
 
-        def recurse(state, depth):
+        def recurse(state, depth, alpha = -99, beta = 99):
             if depth == 3:
                 return self.evaluate_state(state), []
             if depth == 0:
@@ -143,8 +148,9 @@ class AI(User):
                 moves_ = moves[0] + moves[1] + moves[2]
             sample_ = True #sample the moves because brute force is too much
             if sample_:
-                m = moves_[:6]
-                moves_ = m + sample(moves_[6:], 5)
+                m = moves_[:11]
+                if depth > 0:
+                    moves_ = m + sample(moves_[11:], 3)
             best_score = -99
             best_action = ''
             for m1 in moves_:
@@ -159,11 +165,16 @@ class AI(User):
                         continue
                     n += 1
                     state_ = self.update_state(state, m1, m2, orig_state, targets1, targets2)
-                    score, actions = recurse(state_, depth + 1)
+                    score, actions = recurse(state_, depth + 1, alpha, beta)
                     tot_score += score
                     if score < min_score:
                         min_score = score
                         min_action = actions
+                        #alpha-beta pruning
+                        if min_score < beta:
+                            beta = min_score
+                        if beta < alpha:
+                            break
                     elif score == min_score:
                         if random() < .25:
                             min_score = score
@@ -172,11 +183,14 @@ class AI(User):
                 min_score = mean_score
                 if min_score > best_score:
                     best_score = min_score
-                    best_action = [m1] + min_action
+                    best_action = [m1] + list(min_action)
                 elif best_score == min_score:
                     if random() < .25:#break ties randomly
                         best_score = min_score
-                        best_action = [m1] + min_action
+                        best_action = [m1] + list(min_action)
+                if best_score > alpha:
+                    alpha = best_score
+
             return best_score, best_action
         score, best_actions = recurse(state, 0)
         return best_actions

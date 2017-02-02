@@ -7,10 +7,19 @@ from config import VALID_ACTIONS
 
 
 class User():
-    def __init__(self, world, id):
+    def __init__(self, world, id, params = None):
         self.world = world
         self.id = id
         self.world.add_user(self)
+        if not params:
+            self.params = {'health_diff': 1,
+                'los_bonus': 1,
+                'dist_div': 20.,
+                'health_diff_aggress': 1,
+                'win': 5,
+                'lose': -5}
+        else:
+            self.params = params
 
     def command(self, action, number):
         if action not in VALID_ACTIONS:

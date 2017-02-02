@@ -54,6 +54,7 @@ class World():
         self.tiles = [['' for i in range(self.y_len)] for j in range(self.x_len)]
         self.game_over = False
         self.outcome = 0
+        self.round = 0
 
     def add_user(self, user):
         id_ = user.id
@@ -126,17 +127,20 @@ class World():
             self.outcome = 0
 
     def run(self):
+        self.print_tiles()
         while True:
-            self.print_tiles()
+            self.round += 1
             print "USER 1 COMMANDS"
             self.users[1].get_commands()
             print "USER 2 COMMANDS"
             self.users[2].get_commands()
-            self.print_tiles()
             self.execute_logic()
             self.check_victory()
             print self.get_state()
+            self.print_tiles()
             if self.game_over:
+                break
+            if self.round > 25:
                 break
 
 
